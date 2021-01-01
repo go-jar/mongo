@@ -7,20 +7,14 @@ import (
 	"time"
 
 	"github.com/globalsign/mgo/bson"
-	"github.com/go-jar/pool"
-)
-
-const (
-	TEST_COLLECTION = "myCollection"
 )
 
 func TestPool(t *testing.T) {
-	config := &pool.Config{
-		MaxConns:    100,
-		MaxIdleTime: time.Second * 5,
-	}
+	config := &PoolConfig{NewClientFunc: newMongoTestClient}
+	config.MaxConns = 100
+	config.MaxIdleTime = time.Second * 5
 
-	pool := NewPool(config, newMongoTestClient)
+	pool := NewPool(config)
 
 	testPool(pool, t)
 }
